@@ -22,11 +22,6 @@ namespace busqueda3Niveles
             InitializeComponent();
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
@@ -78,12 +73,33 @@ namespace busqueda3Niveles
         private void cargaTextBox(string album)
         {
             string nuevoAlbum = album;
-            if(album.Contains(" "))
+            if(nuevoAlbum.StartsWith(" "))
             {
-                nuevoAlbum = album.Replace(" ", "-");
+                nuevoAlbum = nuevoAlbum.Remove(0, 1);
+            }
+            if (nuevoAlbum.Contains("’"))
+            {
+                nuevoAlbum = nuevoAlbum.Replace("’", " ");
+            }
+            if (nuevoAlbum.Contains(" "))
+            {
+                nuevoAlbum = nuevoAlbum.Replace(" ", "-");
+            }
+            if(nuevoAlbum.Contains("(")&&nuevoAlbum.Contains(")"))
+            {
+                nuevoAlbum = nuevoAlbum.Replace("(", "");
+                nuevoAlbum = nuevoAlbum.Replace(")", "");
+            }
+            if(nuevoAlbum.Contains(":"))
+            {
+                nuevoAlbum = nuevoAlbum.Replace(":", "");
+            }
+            if (nuevoAlbum.Contains("+"))
+            {
+                nuevoAlbum = nuevoAlbum.Replace("+", "");
             }
             WebRequest request = WebRequest.Create("https://genius.com/albums/" + texto + "/"+ nuevoAlbum);
-            Thread.Sleep(3000);
+            Thread.Sleep(4000);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
@@ -106,5 +122,6 @@ namespace busqueda3Niveles
                 }
             }
         }
+
     }
 }
